@@ -1,0 +1,51 @@
+.sideNavBar{
+    background: white;
+    width: 18vw;
+    height: 100vh; 
+    position: fixed;
+    z-index: 2;
+    top: 0;
+}
+.logo{
+    width: 100%;
+    text-align: left;
+    margin-left: 20px;
+}
+.logo img{
+height: 100px;
+margin-top: 10px;
+
+}
+.sideNavBar ul {
+    padding: 10px;
+    width: 100%;
+    /* margin-top: 70px; */
+
+}
+.sideNavBar ul li{
+    list-style-type: none;
+    padding: 15px 0px;
+    background-color: #00496e1a;
+    margin: 5px 0px;
+    border-radius: 5px;
+
+
+}
+.sideNavBar ul li a{
+    text-decoration: none;
+    color: black;
+    font-size: 17px;
+    font-weight: bold;
+    margin-left: 20px;
+    
+
+}
+.logout{
+    width: 100%;
+    height:auto;
+    display: flex;
+    justify-content: center;
+
+
+
+}

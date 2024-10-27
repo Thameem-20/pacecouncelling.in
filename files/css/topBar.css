@@ -1,0 +1,22 @@
+.topBar{
+    position: absolute;
+    height: 60px;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    display: flex;
+    width: 82vw;
+    justify-content: space-between;
+}
+.profile{
+    font-weight: bold;
+}
+.profile img{
+    height: 45px;
+
+}
+.searchBar form input{
+    width: 30vw;
+    margin-left: 18vw;
+    
+}
