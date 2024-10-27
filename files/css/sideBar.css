@@ -1,8 +1,8 @@
 .sideNavBar{
     background: white;
-    width: 18vw;
+    width: 22vw !important;
     height: 100vh; 
-    position: fixed;
+    /* position: fixed; */
     z-index: 2;
     top: 0;
 }
@@ -36,7 +36,7 @@ margin-top: 10px;
     color: black;
     font-size: 17px;
     font-weight: bold;
-    margin-left: 20px;
+    /* margin-left: 20px; */
     
 
 }

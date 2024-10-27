@@ -46,71 +46,7 @@ $conn->close();
     <link rel="stylesheet" href="./files/css/index.css">
     <link rel="stylesheet" href="./files/css/style.css">
     <style>
-        .card {
-            transition: transform 0.2s ease-in-out;
-            border-radius: 10px;
-            border: none;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-body {
-            padding: 1.5rem;
-        }
-
-        .display-4 {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #00496e;
-        }
-
-        .card-title {
-            color: #333;
-            font-weight: 600;
-        }
-
-        .btn-primary {
-            background-color: #00496e;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background-color: #003857;
-        }
-
-        /* Sidebar styles */
-        .sidebar {
-            background-color: #f8f9fa;
-            padding: 20px;
-        }
-
-        .side-link {
-            color: #333;
-            padding: 8px 16px;
-            text-decoration: none;
-            display: block;
-            transition: background-color 0.3s;
-        }
-
-        .side-link:hover {
-            background-color: #e9ecef;
-            border-radius: 5px;
-        }
-
-        /* Main content area */
-        .main-content {
-            padding: 20px;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .sidebar {
-                margin-bottom: 20px;
-            }
-        }
+       
     </style>
 </head>
 <body>
@@ -147,7 +83,7 @@ $conn->close();
     </nav>
 
     <div class="container-fluid">
-        <div class="row">
+        <div class="row ">
             <!-- Sidebar for branches -->
             <nav class="my-3 col-md-3 col-lg-2 d-md-block sidebar">
                 <div class="position-sticky">
@@ -167,10 +103,10 @@ $conn->close();
 
             <!-- Main content area -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-                <h2 class="mt-4">Welcome to Student Management System</h2>
+                <h2 class="mt-5">Welcome to Student Management System</h2>
                 
                 <!-- Department Statistics Cards -->
-                <div class="row mt-4">
+                <div class="row mt-4 justify-content-start">
                     <?php foreach ($department_stats as $dept): ?>
                         <div class="col-md-4 mb-4">
                             <div class="card">

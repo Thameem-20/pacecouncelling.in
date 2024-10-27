@@ -79,6 +79,8 @@ $conn->close();
           </li>
           <li class="nav-item">
             <a class="btn btn-danger" href="./logout.php">Logout</a>
+            &nbsp;
+            &nbsp;
           </li>
 
         </ul>

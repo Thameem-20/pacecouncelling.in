@@ -112,7 +112,9 @@ $conn->close();
 
     <li> <a href="./index.php"><i class="fa fa-home"></i>  Home</a></li> 
     
-    <li><a href="./department_students.php"> <i class="fa fa-graduation-cap"></i>Departments</a></li>
+    <li><a href="./department_students.php"> <i class="fa fa-graduation-cap"></i> Orientation</a></li>
+    <li><a href="./department_students.php"> <i class="fa fa-user"></i> Profile update</a></li>
+
   </ul>
   <div class="logout">
     <a class="btn btn-danger" href="./logout.php"> <i class="fa fa-power-off"></i>      Logout</a>
@@ -130,7 +132,7 @@ $conn->close();
   </div>
   <div class="profile">
 
-    <?php echo $loggedName ?>
+    <?php echo $_SESSION['Full_Name']?> &nbsp;
 
     <img src="./images/user-icon-1024x1024-dtzturco.png" alt="">
   </div>
@@ -259,7 +261,7 @@ _
 
 <footer class="footer mt-auto py-3 bg-light">
     <div class=" text-center">
-      <img src="./images/codewizycredits.png" alt="couldn't Load Image">
+      <img src="./images/footerCreditsIS.png" alt="couldn't Load Image">
     </div>
 </footer>
 
