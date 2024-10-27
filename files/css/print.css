@@ -1,0 +1,36 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.PrintHeader {
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    text-align: center;
+}
+
+.PrintHeader h3 {
+    font-size: 35px;
+}
+
+.PrintHeader p {
+    font-size: 13px;
+}
+
+.college {
+    margin-left: 10px;
+}
+
+.printPersonal {
+    margin-top: 20px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #f8f9fa;
+    text-align: center;
+    padding: 10px 0;
+}

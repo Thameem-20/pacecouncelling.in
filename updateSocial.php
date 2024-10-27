@@ -13,9 +13,10 @@ if ($student_id != '') {
     $result = $stmt->get_result();
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $linkedin = $row['linkedin'];
-        $github = $row['github'];
-        $resume = $row['resume'];
+        $linkedin = $row['linkedin'] ?? '';
+        $github = $row['github'] ?? '';
+        $resume = $row['resume'] ?? '';
+        $photo = $row['photo'] ?? '';
     }
     $stmt->close();
 }
@@ -28,16 +29,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $types = "ss";
     $params = [$linkedin, $github];
 
+    // Handle resume upload
     if (isset($_FILES['resume']) && $_FILES['resume']['error'] == UPLOAD_ERR_OK) {
         $resume_file = $_FILES['resume'];
         $resume_filename = basename($resume_file['name']);
         $resume_temp_path = $resume_file['tmp_name'];
         $resume_upload_path = './uploads/resumes/' . $resume_filename;
-        move_uploaded_file($resume_temp_path, $resume_upload_path);
 
-        $sql .= ", resume = ?";
-        $types .= "s";
-        $params[] = $resume_filename;
+        if (move_uploaded_file($resume_temp_path, $resume_upload_path)) {
+            $sql .= ", resume = ?";
+            $types .= "s";
+            $params[] = $resume_filename;
+        } else {
+            $error_message = "Error uploading resume.";
+        }
+    }
+
+    // Handle photo upload
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] == UPLOAD_ERR_OK) {
+        $photo_file = $_FILES['photo'];
+        $photo_filename = basename($photo_file['name']);
+        $photo_temp_path = $photo_file['tmp_name'];
+        $photo_upload_path = './uploads/photos/' . $photo_filename;
+
+        if (move_uploaded_file($photo_temp_path, $photo_upload_path)) {
+            $sql .= ", photo = ?";
+            $types .= "s";
+            $params[] = $photo_filename;
+        } else {
+            $error_message = "Error uploading photo.";
+        }
     }
 
     $sql .= " WHERE student_id = ?";
@@ -60,9 +81,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,6 +92,9 @@ $conn->close();
 <body>
     <div class="container mt-5">
         <h2 class="mb-3">Update Social Media Links</h2>
+        <?php if ($error_message): ?>
+            <div class="alert alert-danger"><?php echo htmlspecialchars($error_message); ?></div>
+        <?php endif; ?>
         <form method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="linkedin" class="form-label">LinkedIn Profile</label>
@@ -86,6 +107,16 @@ $conn->close();
             <div class="mb-3">
                 <label for="resume" class="form-label">Resume</label>
                 <input type="file" class="form-control" id="resume" name="resume">
+                <?php if ($resume): ?>
+                    <small>Current Resume: <a href="./uploads/resumes/<?php echo htmlspecialchars($resume); ?>" target="_blank">View</a></small>
+                <?php endif; ?>
+            </div>
+            <div class="mb-3">
+                <label for="photo" class="form-label">Profile Photo</label>
+                <input type="file" class="form-control" id="photo" name="photo">
+                <?php if ($photo): ?>
+                    <small>Current Photo: <img src="./uploads/photos/<?php echo htmlspecialchars($photo); ?>" alt="Profile Photo" style="width: 100px; height: auto;"></small>
+                <?php endif; ?>
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
             <button type="button" class="btn btn-outline-secondary" onclick="window.history.back()">Cancel</button>

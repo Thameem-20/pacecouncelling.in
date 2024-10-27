@@ -58,7 +58,9 @@ $conn->close();
                         <div class="dropdown-menu">
                             <ul>
                                 <li><a class="dropdown-item" href="./add_student.php">Add Student Details</a></li>
-                                <li><a class="dropdown-item" href="./Add-Departments.php">Add new Departme</a></li>
+                                <li><a class="dropdown-item" href="./Add-Departments.php">Add new Department</a></li>
+                                <li><a class="dropdown-item" href="./signup.php">Add Staff</a></li>
+
 
                             </ul>
                         </div>

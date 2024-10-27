@@ -73,7 +73,9 @@ $conn->close();
             </a>
             <div class="dropdown-menu">
               <ul>
-                <li><a class="dropdown-item" href="./add_student.php">Add Student Details</a></li>
+              <li><a class="dropdown-item" href="./add_student.php">Add Student Details</a></li>
+              <li><a class="dropdown-item" href="./Add-Departments.php">Add new Department</a></li>
+              <li><a class="dropdown-item" href="./signup.php">Add Staff</a></li>
                 
 
               </ul>
@@ -138,7 +140,7 @@ $conn->close();
                             <p class="card-text col-md-4"><strong>Branch:</strong> <?= htmlspecialchars($row['branch']) ?></p>
                       </div>
                             
-                            <a href="profile.php?id=<?= $row['id'] ?>" class="btn btn-outline-primary viewDetailsbtn">View Details</a>
+                            <a href="profile.php?id=<?= $row['id'] ?>" class="btn btn-primary viewDetailsbtn">View Details</a>
                         </div>
                     </div>
                 </div>
