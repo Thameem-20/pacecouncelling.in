@@ -130,7 +130,7 @@ $conn->close();
                         <div class="dropdown-menu">
                             <ul>
                                 <li><a class="dropdown-item" href="./add_student.php">Add Student Details</a></li>
-                                <li><a class="dropdown-item" href="./Add-Departments.php">Add Student Details</a></li>
+                                <li><a class="dropdown-item" href="./Add-Departments.php">Add new Departme</a></li>
 
                             </ul>
                         </div>
@@ -173,10 +173,10 @@ $conn->close();
                                     <div class="branch-icon">
                                         <i class="fas fa-graduation-cap"></i>
                                     </div>
-                                    <h5 class="card-title"><?= htmlspecialchars($branch['branch']) ?></h5>
+                                    <h5 class="card-title">Batch: <?= htmlspecialchars($branch['branch']) ?></h5>
                                     <div class="display-4 my-3"><?= htmlspecialchars($branch['student_count']) ?></div>
                                     <p class="card-text text-muted">Total Students</p>
-                                    <a href="branch_details.php?branch=<?= urlencode($branch['branch']) ?>" 
+                                    <a href="batch_departments.php?branch=<?= urlencode($branch['branch']) ?>" 
                                        class="btn btn-primary">View Details</a>
                                 </div>
                             </div>
@@ -186,7 +186,9 @@ $conn->close();
             </main>
         </div>
     </div>
+<style>
 
+</style>
     <!-- Add FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

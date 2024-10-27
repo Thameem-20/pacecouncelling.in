@@ -178,7 +178,7 @@ $conn->close();
                                     <h5 class="card-title"><?= htmlspecialchars($dept['department']) ?></h5>
                                     <div class="display-4 my-3"><?= htmlspecialchars($dept['student_count']) ?></div>
                                     <p class="card-text text-muted">Total Students</p>
-                                    <a href="department_details.php?dept=<?= urlencode($dept['department']) ?>" 
+                                    <a href="department_students.php?dept=<?= urlencode($dept['department'])?>&branch=<?php echo $branch?>" 
                                        class="btn btn-primary">View Details</a>
                                 </div>
                             </div>

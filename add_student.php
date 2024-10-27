@@ -203,7 +203,7 @@ $conn->close();
           <input type="text" class="form-control" id="section" name="section" required>
         </div>
         <div class="mb-3 col-md-6">
-          <label for="branch" class="form-label">Branch</label>
+          <label for="branch" class="form-label">Batch</label>
           <input type="text" class="form-control" id="branch" name="branch" required>
         </div>
       </div>
