@@ -43,6 +43,14 @@ $conn->close();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./files/css/index.css">
     <link rel="stylesheet" href="./files/css/style.css">
+    <style>
+       .sidebar{
+    width: 23vw !important;
+}
+.main-content{
+  width: 77vw;
+}
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #d8e6c3;">
@@ -112,7 +120,8 @@ $conn->close();
             </nav>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-    <h2 class="mt-4"><?= htmlspecialchars($department) ?> Students</h2>
+    <h2 class="mt-5"><?= htmlspecialchars($department) ?> Students</h2>
+    <br>
     <div class="container">
         <div style="justify-content:flex-start" class="row">
             <?php while ($row = $result->fetch_assoc()): ?>

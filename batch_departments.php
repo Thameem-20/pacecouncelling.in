@@ -46,7 +46,12 @@ $conn->close();
     <link rel="stylesheet" href="./files/css/index.css">
     <link rel="stylesheet" href="./files/css/style.css">
     <style>
-       
+       .sidebar{
+    width: 23vw !important;
+}
+.main-content{
+  width: 77vw;
+}
     </style>
 </head>
 <body>

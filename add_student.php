@@ -168,9 +168,12 @@ $conn->close();
           <input type="text" class="form-control" id="name" name="name" required>
         </div>
         <div class="mb-3 col-md-6">
-          <label for="usn" class="form-label">USN</label>
-          <input type="text" class="form-control" id="usn" name="usn" required>
-        </div>
+  <label for="usn" class="form-label">USN</label>
+  <input type="text" class="form-control" id="usn" name="usn" required 
+         pattern="^[1-9][A-Z]{2}\d{2}[A-Z]{2}\d{1,3}$" 
+         title="Enter a valid USN in the format like 4PA20CS100 or 4PA20CS01">
+</div>
+
       </div>
       <div class="row">
         <div class="mb-3 col-md-6">
@@ -198,10 +201,13 @@ $conn->close();
         </div>
       </div>
       <div class="row">
-        <div class="mb-3 col-md-6">
-          <label for="section" class="form-label">Section</label>
-          <input type="text" class="form-control" id="section" name="section" required>
-        </div>
+      <div class="mb-3 col-md-6">
+  <label for="section" class="form-label">Section</label>
+  <input type="text" class="form-control" id="section" name="section" required 
+         pattern="^[A-Z]$" 
+         title="Enter a valid section (A, B, C, D, etc.)">
+</div>
+
         <div class="mb-3 col-md-6">
           <label for="branch" class="form-label">Batch</label>
           <input type="text" class="form-control" id="branch" name="branch" required>
