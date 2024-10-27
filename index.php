@@ -95,7 +95,7 @@ $conn->close();
                 <h2 class="mt-4">Welcome to Student Management System</h2>
                 
                 <!-- Branch Statistics Cards -->
-                <div class="row mt-4">
+                <div class="row mt-4 justify-content-start">
                     <?php foreach ($branches_with_stats as $branch): ?>
                         <div class="col-md-4 mb-4">
                             <div class="card">
