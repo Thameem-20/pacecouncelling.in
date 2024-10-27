@@ -1,23 +1,27 @@
 <?php
 include("./config.php");
 session_start();
-
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
 
-// Fetch all unique branches
-$branch_query = "SELECT DISTINCT branch FROM student_details ORDER BY branch";
+// Fetch all unique branches and their student counts
+$branch_query = "SELECT branch, COUNT(*) as student_count 
+                FROM student_details 
+                GROUP BY branch 
+                ORDER BY branch";
 $branch_result = $conn->query($branch_query);
-$branches = [];
+$branches_with_stats = [];
 while ($row = $branch_result->fetch_assoc()) {
-    $branches[] = $row['branch'];
+    $branches_with_stats[] = $row;
 }
+
+// For sidebar - might still need all branches
+$branches = array_column($branches_with_stats, 'branch');
 
 $conn->close();
 ?>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -27,49 +31,116 @@ $conn->close();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./files/css/index.css">
     <link rel="stylesheet" href="./files/css/style.css">
+    <style>
+        .card {
+            transition: transform 0.2s ease-in-out;
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .display-4 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #00496e;
+        }
+
+        .card-title {
+            color: #333;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .btn-primary {
+            background-color: #00496e;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #003857;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .side-link {
+            color: #333;
+            padding: 8px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+        .side-link:hover {
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+
+        /* Main content area */
+        .main-content {
+            padding: 20px;
+        }
+
+        /* Card icon styles */
+        .branch-icon {
+            font-size: 2.5rem;
+            color: #00496e;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-<nav class="navbar navBar navbar-expand-lg navbar-dark" style="background-color: #00496e !important;">
-    <div class="container-fluid">
-      <a class="navbar-brand fw-bold" href="#">Orientation</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Add
-            </a>
-            <div class="dropdown-menu">
-              <ul>
-                <li><a class="dropdown-item" href="./add_student.php">Add Student Details</a></li>
+    <nav class="navbar navBar navbar-expand-lg navbar-dark" style="background-color: #00496e !important;">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">Orientation</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Add
+                        </a>
+                        <div class="dropdown-menu">
+                            <ul>
+                                <li><a class="dropdown-item" href="./add_student.php">Add Student Details</a></li>
+                                <li><a class="dropdown-item" href="./Add-Departments.php">Add Student Details</a></li>
 
-              </ul>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>&nbsp;&nbsp;&nbsp;</li>
+                </ul>
+                <a class="btn btn-danger" href="./logout.php">Logout</a>
             </div>
-          </li>
-          <li>
-            &nbsp;
-
-            &nbsp;
-            &nbsp;
-          </li>
-          
-
-        </ul>
-            <a class="btn btn-danger" href="./logout.php">Logout</a>
-          
-
-      </div>
-    </div>
-  </nav>
+        </div>
+    </nav>
 
     <div class="container-fluid">
         <div class="row">
@@ -77,26 +148,47 @@ $conn->close();
             <nav class="my-5 col-md-3 col-lg-2 d-md-block sidebar">
                 <div class="position-sticky">
                     <ul class="nav flex-column">
-                    <hr style="margin-top: -5px; margin-left:-12px; color: white; width:250px;">
+                        <hr style="margin-top: -5px; margin-left:-12px; color: white; width:250px;">
                         <?php foreach ($branches as $branch): ?>
                             <li class="nav-item">
                                 <a class="nav-link side-link" href="batch_departments.php?branch=<?= urlencode($branch) ?>">
-                                    branch: <?= htmlspecialchars($branch) ?>
+                                    Batch: <?= htmlspecialchars($branch) ?>
                                 </a>
                             </li>
-                            
                         <?php endforeach; ?>
                     </ul>
                 </div>
             </nav>
 
+            <!-- Main content area -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
                 <h2 class="mt-4">Welcome to Student Management System</h2>
-                <p>Select a branch from the sidebar to view departments.</p>
+                
+                <!-- Branch Statistics Cards -->
+                <div class="row mt-4">
+                    <?php foreach ($branches_with_stats as $branch): ?>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <div class="branch-icon">
+                                        <i class="fas fa-graduation-cap"></i>
+                                    </div>
+                                    <h5 class="card-title"><?= htmlspecialchars($branch['branch']) ?></h5>
+                                    <div class="display-4 my-3"><?= htmlspecialchars($branch['student_count']) ?></div>
+                                    <p class="card-text text-muted">Total Students</p>
+                                    <a href="branch_details.php?branch=<?= urlencode($branch['branch']) ?>" 
+                                       class="btn btn-primary">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             </main>
         </div>
     </div>
 
+    <!-- Add FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./files/js/main.js"></script>
 </body>

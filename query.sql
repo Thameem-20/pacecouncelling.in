@@ -60,3 +60,9 @@ CREATE TABLE users (
   password VARCHAR(255) NOT NULL,        
   user_type VARCHAR(20) NOT NULL         
 );
+
+CREATE TABLE departments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    department_name VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

@@ -13,26 +13,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $stmt->store_result();
-        
+
         if ($stmt->num_rows > 0) {
             $stmt->bind_result($id, $full_name, $email, $db_password, $user_type);
             $stmt->fetch();
-            
-            if (password_verify($password,$db_password)) { 
+
+            if (password_verify($password, $db_password)) {
                 $_SESSION['username'] = $username;
                 $_SESSION['email'] = $email;
                 $_SESSION['user_type'] = $user_type;
                 $_SESSION['Full_Name'] = $full_name;
                 header("Location: ./index.php");
-                $error ="success";
+                $error = "success";
                 exit();
             } else {
-                $error = "Invalid password.".$db_password;
+                $error = "Invalid password." . $db_password;
             }
         } else {
             $error = "Invalid username or password.";
         }
-        
+
         $stmt->close();
     }
 }
@@ -40,15 +40,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
+    <link rel="stylesheet" href="./files/css/form.css">
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
+
 <body>
-    <div class="container mt-5">
+    <!-- <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
@@ -64,11 +67,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <form method="post" action="">
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
+
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
-                               <input type="password" class="form-control" id="password" name="password" required>
+                                <input type="password" class="form-control" id="password" name="password" required>
                             </div>
                             <button type="submit" class="btn btn-primary btn-block">Login</button>
                         </form><br>
@@ -77,7 +80,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
         </div>
+    </div> -->
+    <!-- /* From Uiverse.io by glisovic01 */  -->
+    <div class="login-box">
+        <?php
+        if (isset($error)) {
+            echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
+        }
+        ?>
+        <p>Login</p>
+        <form method="post" action="">
+            <div class="user-box">
+
+                <input type="text" id="username" name="username" required>
+                <label>Username</label>
+            </div>
+            <div class="user-box">
+                <input type="password" id="password" name="password" required>
+                <label>Password</label>
+            </div>
+            <button type="submit" class="btn btn-outline-light">Login </button>
+        </form><br>
+        <p>Don't have an account? <a href="" class="a2">Sign up!</a></p>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
+
 </html>
