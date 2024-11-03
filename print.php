@@ -81,6 +81,12 @@ if ($result->num_rows > 0) {
 }
 
 $stmt->close();
+// Remarks query
+$remarks_sql = "SELECT title, date, semester, description, remark FROM remarks WHERE usn = ?";
+$remarks_stmt = $conn->prepare($remarks_sql);
+$remarks_stmt->bind_param("s", $usn);
+$remarks_stmt->execute();
+$remarks_result = $remarks_stmt->get_result();
 $conn->close();
 ?>
 
@@ -232,9 +238,47 @@ $conn->close();
             <p><strong>Counsellor:</strong> <?php echo htmlspecialchars($counsellor); ?></p>
             <p><strong>Feedback:</strong> <?php echo htmlspecialchars($feedback); ?></p>
         </div>
+
     </div>
 
+    <div class="container">
+        <!-- Student Information Sections ... (as before) -->
+
+        <!-- Remarks Section -->
+        <div class="info-section">
+            <h5>Remarks History</h5>
+            <?php
+            if ($remarks_result->num_rows > 0) {
+                while ($remark = $remarks_result->fetch_assoc()) {
+                    ?>
+                    <div class="card mb-3 border-light shadow-sm">
+                        <div class="card-body">
+                            <h6 class="card-title text-primary"><?php echo htmlspecialchars($remark['title']); ?></h6>
+                            <p class="mb-1"><strong>Date:</strong> <?php echo htmlspecialchars($remark['date']); ?></p>
+                            <p class="mb-1"><strong>Semester:</strong> <?php echo htmlspecialchars($remark['semester']); ?></p>
+                            <p class="mb-1"><strong>Description:</strong> <?php echo htmlspecialchars($remark['description']); ?></p>
+                            <p class="mb-0"><strong>Remark:</strong> <?php echo htmlspecialchars($remark['remark']); ?></p>
+                        </div>
+                    </div>
+                    <?php
+                }
+            } else {
+                echo "<p>No remarks found for this student.</p>";
+            }
+            ?>
+        </div>
+    </div>
+    <!-- <button onclick="printBtn()" style="position:fixed;right:30px;bottom:30px"  class="btn btn-success" id="printBtn">print</button> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // function printBtn(){
+    //     document.getElementById("printBtn").style.display="none";
+    //     window.print();
+
+    // }
+    window.print();
+
+</script>
 </body>
 
 </html>

@@ -66,3 +66,16 @@ CREATE TABLE departments (
     department_name VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE remarks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usn VARCHAR(20),
+    date DATE,
+    semester INT,
+    title VARCHAR(200),
+    description TEXT,
+    remark VARCHAR(500),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (usn) REFERENCES student_details(usn) ON DELETE CASCADE ON UPDATE CASCADE
+);
