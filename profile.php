@@ -67,6 +67,7 @@ $conn->close();
     <title>Student Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         body {
             background: #f4f6f9;
@@ -177,9 +178,11 @@ $conn->close();
 <body>
 
     <div class="sideNavBar">
-        <h4>Dashboard</h4>
+        <h4>
+            Dashboard</h4>
         <ul>
             <li><a href="./index.php"><i class="fa fa-home"></i>&nbsp;Home</a></li>
+
             <li><a href="./updateprofile.php"><i class="fa fa-user"></i>&nbsp;&nbsp;Profile Update</a></li>
             <li><a href="./add_orientation.php?id=<?php echo $id; ?>"><i class="fa fa-arrows"></i>&nbsp;update Orientation</a></li>
 
@@ -191,7 +194,8 @@ $conn->close();
 
     <div class="topBar d-flex justify-content-between align-items-center  ">
         <div>
-            <h5 class="m-0">Student Dashboard</h5>
+            <h5 class="m-0"> <i style="color:white;cursor:pointer"  onclick="window.history.back()" class="fa fa-arrow-circle-left "></i> &nbsp;&nbsp;
+                Student Dashboard</h5>
         </div>
         <div class="profile">
             <span><?php echo htmlspecialchars($loggedName); ?></span>
@@ -208,11 +212,13 @@ $conn->close();
                         <div class="ms-3 ">
                             <h4><?php echo htmlspecialchars($student['name'] ?? 'Default Name'); ?></h4>
                             <p><?php echo htmlspecialchars($student['Bio'] ?? 'Default Bio'); ?></p>
-                            <div class="row align-items-center " style="width: 800px !important;">
-                                <div class="col-md-3">&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-outline-success"  href="./updateprofile.php?id=<?php echo $id; ?>">update Profile</a></div>
-                                <div class="col-md-3"><a class="btn btn-outline-primary" href="./add_orientation.php?id=<?php echo $id; ?>">update Orientation</a></div>
+                            <div class="row align-items-center justify-content-centwer " style="width: 800px !important;">
+                                <div class="col-md">&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-outline-success" href="./updateprofile.php?id=<?php echo $id; ?>">update Profile</a></div>
+                                <div class="col-md"><a class="btn btn-outline-primary" href="./add_orientation.php?id=<?php echo $id; ?>">update Orientation</a></div>
 
-                                <div class="col-md-3"><a class="btn btn-outline-dark" href="./print.php?usn=<?php echo $student['usn']; ?>">Print </a></div>
+                                <div class="col-md"><a class="btn btn-outline-dark" href="./remarks.php?usn=<?php echo $student['usn']; ?>">Remarks </a></div>
+
+                                <div class="col-md"><a class="btn btn-outline-warning" href="./print.php?usn=<?php echo $student['usn']; ?>">Print </a></div>
 
                             </div>
                         </div>
