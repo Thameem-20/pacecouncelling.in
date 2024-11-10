@@ -234,7 +234,7 @@ $conn->close();
                     <h3 class="section-title mb-4">Personal Details</h3>
                     <table class="table table-borderless">
                         <tbody>
-                            <?php foreach (['usn' => 'USN', 'email' => 'Email', 'phone' => 'Phone', 'department' => 'Department', 'semester' => 'Semester', 'tenth_aggr' => '10th Aggregate', 'twelveth_aggr' => '12th Aggregate', 'engg_aggr' => 'Engineering Aggregate'] as $key => $label): ?>
+                            <?php foreach (['usn' => 'USN', 'email' => 'Email', 'phone' => 'Phone', 'department' => 'Department', 'semester' => 'Semester', 'tenth_aggr' => '10th Aggregate', 'twelveth_aggr' => '12th Aggregate', 'engg_aggr' => 'Engineering Aggregate', 'faculty' => 'Faculty in charge'] as $key => $label): ?>
                                 <tr>
                                     <td class="fw-bold" style="width: 30%;"><?php echo $label; ?>:</td>
                                     <td><?php echo htmlspecialchars($student[$key] ?? 'N/A'); ?></td>
