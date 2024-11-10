@@ -1,7 +1,9 @@
 <?php
 include("./config.php");
 session_start();
-
+if( $_SESSION['user_type'] ="faculty"){
+    header("Location:./accessDenied.html");
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $full_name = $_POST['Full_Name'];
     $username = $_POST['username'];
@@ -37,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['Full_Name'] = $full_name;
 
             // Redirect to the login page after successful signup
-            header("Location: login.php");
+            header("Location: index.php");
             exit(); // Ensure no further code is executed
         } else {
             $error = "Error: " . $stmt->error;
@@ -116,7 +118,6 @@ $conn->close();
                             </div>
                             <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
                         </form><br>
-                        <a href="login.php">Already have an account? Login here</a>
                     </div>
                 </div>
             </div>

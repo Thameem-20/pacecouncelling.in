@@ -6,11 +6,13 @@ if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
+$loggedInName=$_SESSION['Full_Name'] ;
 
 $department = isset($_GET['dept']) ? $_GET['dept'] : '';
 $batch = $_GET['branch'];
 
 // Fetch all unique departments for the sidebar
+
 $dept_query = "SELECT DISTINCT department FROM student_details  where branch = '$batch'  ORDER BY department ";
 $dept_result = $conn->query($dept_query);
 $departments = [];
@@ -18,13 +20,24 @@ while ($row = $dept_result->fetch_assoc()) {
     $departments[] = $row['department'];
 }
 // Fetch students of the selected department and batch
+if($_SESSION['user_type']=="admin"){
+
 $student_query = "
     SELECT id, name, usn, semester, section, branch 
     FROM student_details 
     WHERE department = ? 
     AND branch = ? 
     ORDER BY name";
-    
+}else{
+
+  
+$student_query = "
+SELECT id, name, usn, semester, section, branch 
+FROM student_details 
+WHERE department = ?  AND faculty = '$loggedInName' 
+AND branch = ? 
+ORDER BY name";
+}
 $stmt = $conn->prepare($student_query);
 $stmt->bind_param("ss", $department, $batch);  // Bind both department and batch
 $stmt->execute();
@@ -64,9 +77,7 @@ $conn->close();
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="./index.php">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Add

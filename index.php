@@ -5,12 +5,24 @@ if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
+ $loggedInName=$_SESSION['Full_Name'] ;
 
 // Fetch all unique branches and their student counts
+if($_SESSION['user_type']=="admin"){
 $branch_query = "SELECT branch, COUNT(*) as student_count 
                 FROM student_details 
                 GROUP BY branch 
                 ORDER BY branch";
+}else{
+    $branch_query = "SELECT branch, COUNT(*) as student_count 
+    FROM student_details 
+    WHERE faculty= '$loggedInName'
+    GROUP BY branch 
+    ORDER BY branch
+    "
+    ;
+
+}
 $branch_result = $conn->query($branch_query);
 $branches_with_stats = [];
 while ($row = $branch_result->fetch_assoc()) {
@@ -48,9 +60,9 @@ $conn->close();
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="#">Link</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Add
@@ -94,7 +106,7 @@ $conn->close();
 
             <!-- Main content area -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-                <h2 class="mt-4">Welcome to Student Management System</h2>
+                <h2 class="mt-4">Welcome to Student Management System <?php echo $_SESSION['user_type'] ?></h2>
                 
                 <!-- Branch Statistics Cards -->
                 <div class="row mt-4 justify-content-start">

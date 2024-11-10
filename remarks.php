@@ -77,7 +77,7 @@ $remarks_result = $conn->query($remarks_sql);
                 <div class="card mb-4 border-0 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title text-primary"><?php echo htmlspecialchars($row['title']); ?></h5>
-                        <p class="mb-3"><strong>Description:</strong><br> <?php echo htmlspecialchars($row['description']); ?></p>
+                        <p class="mb-3"><strong>Answer:</strong><br> <?php echo htmlspecialchars($row['description']); ?></p>
                         <p><strong>Remark:</strong><br> <?php echo htmlspecialchars($row['remark']); ?></p>
                         <p class="text-muted mb-2"><strong>During Semester:</strong> <?php echo htmlspecialchars($row['semester']); ?></p>
 
@@ -115,11 +115,11 @@ $remarks_result = $conn->query($remarks_sql);
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="title">Title:</label>
+                                <label for="title">Question:</label>
                                 <input type="text" id="title" name="title" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label for="description">Description:</label>
+                                <label for="description">Answer:</label>
                                 <textarea id="description" name="description" rows="3" class="form-control" required></textarea>
                             </div>
                             <div class="form-group">

@@ -5,11 +5,21 @@ if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
+$loggedInName = $_SESSION['Full_Name'];
+
 
 $branch = isset($_GET['branch']) ? $_GET['branch'] : '';
 
 // Fetch all unique departments for the selected branch
-$dept_query = "SELECT DISTINCT department FROM student_details WHERE branch = ? ORDER BY department";
+if ($_SESSION['user_type'] == "admin") {
+
+    $dept_query = "SELECT DISTINCT department FROM student_details WHERE branch = ? ORDER BY department";
+} else {
+    $dept_query = "SELECT DISTINCT department 
+    FROM student_details 
+    WHERE branch = ? AND faculty = '$loggedInName' 
+    ORDER BY department";
+}
 $stmt = $conn->prepare($dept_query);
 $stmt->bind_param("s", $branch);
 $stmt->execute();
@@ -20,11 +30,21 @@ while ($row = $dept_result->fetch_assoc()) {
 }
 
 // Fetch department statistics for the selected branch
-$dept_stats_query = "SELECT department, COUNT(*) as student_count 
+if ($_SESSION['user_type'] == "admin") {
+
+    $dept_stats_query = "SELECT department, COUNT(*) as student_count 
                     FROM student_details 
-                    WHERE branch = ?
+                    WHERE branch = ? 
                     GROUP BY department 
                     ORDER BY department";
+} else {
+    $dept_stats_query = "SELECT department, COUNT(*) as student_count 
+    FROM student_details 
+                    WHERE branch = ? AND faculty = '$loggedInName' 
+    GROUP BY department 
+    ORDER BY department";
+}
+
 $stmt = $conn->prepare($dept_stats_query);
 $stmt->bind_param("s", $branch);
 $stmt->execute();
@@ -38,6 +58,7 @@ $conn->close();
 ?>
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -46,20 +67,22 @@ $conn->close();
     <link rel="stylesheet" href="./files/css/index.css">
     <link rel="stylesheet" href="./files/css/style.css">
     <style>
-       .sidebar{
-    width: 23vw !important;
-}
-.main-content{
-  width: 77vw;
-}
+        .sidebar {
+            width: 23vw !important;
+        }
+
+        .main-content {
+            width: 77vw;
+        }
     </style>
 </head>
+
 <body>
     <nav class="navbar navBar navbar-expand-lg navbar-dark" style="background-color: #00496e !important;">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="#">Orientation</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -67,18 +90,16 @@ $conn->close();
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="./index.php">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Add
                         </a>
                         <div class="dropdown-menu">
                             <ul>
-                            <li><a class="dropdown-item" href="./add_student.php">Add Student Details</a></li>
-                            <li><a class="dropdown-item" href="./Add-Departments.php">Add new Department</a></li>
-                            <li><a class="dropdown-item" href="./signup.php">Add Staff</a></li>
+                                <li><a class="dropdown-item" href="./add_student.php">Add Student Details</a></li>
+                                <li><a class="dropdown-item" href="./Add-Departments.php">Add new Department</a></li>
+                                <li><a class="dropdown-item" href="./signup.php">Add Staff</a></li>
                             </ul>
                         </div>
                     </li>
@@ -102,7 +123,7 @@ $conn->close();
                                     <?= htmlspecialchars($dept) ?>
                                 </a>
                             </li>
-                            
+
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -111,7 +132,7 @@ $conn->close();
             <!-- Main content area -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
                 <h2 class="mt-5">Welcome to Student Management System</h2>
-                
+
                 <!-- Department Statistics Cards -->
                 <div class="row mt-4 justify-content-start">
                     <?php foreach ($department_stats as $dept): ?>
@@ -121,8 +142,8 @@ $conn->close();
                                     <h5 class="card-title"><?= htmlspecialchars($dept['department']) ?></h5>
                                     <div class="display-4 my-3"><?= htmlspecialchars($dept['student_count']) ?></div>
                                     <p class="card-text text-muted">Total Students</p>
-                                    <a href="department_students.php?dept=<?= urlencode($dept['department'])?>&branch=<?php echo $branch?>" 
-                                       class="btn btn-primary">View Details</a>
+                                    <a href="department_students.php?dept=<?= urlencode($dept['department']) ?>&branch=<?php echo $branch ?>"
+                                        class="btn btn-primary">View Details</a>
                                 </div>
                             </div>
                         </div>
@@ -137,4 +158,5 @@ $conn->close();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./files/js/main.js"></script>
 </body>
+
 </html>

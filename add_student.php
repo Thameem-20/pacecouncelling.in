@@ -15,6 +15,14 @@ while ($row = $branch_result->fetch_assoc()) {
     $branches[] = $row['branch'];
 }
 
+// Fetch all unique departments for the dropdown
+$department_query = "SELECT department_name FROM departments ORDER BY department_name";
+$department_result = $conn->query($department_query);
+
+// Fetch all unique faculty names for the dropdown
+$faculty_query = "SELECT Full_Name FROM Users ORDER BY Full_Name";
+$faculty_result = $conn->query($faculty_query);
+
 $conn->close();
 ?>
 
@@ -33,6 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $engg_aggr = $_POST['engg_aggr'];
     $section = $_POST['section'];
     $branch = $_POST['branch'];
+    $faculty = $_POST['faculty'];
 
     // Check if USN already exists
     $check_usn_stmt = $conn->prepare("SELECT usn FROM student_details WHERE usn = ?");
@@ -44,8 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>alert('Error: USN already exists.');</script>";
     } else {
         // Proceed with the insertion
-        $stmt = $conn->prepare("INSERT INTO student_details (name, usn, email, phone, department, semester, tenth_aggr, twelveth_aggr, engg_aggr, section, branch) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssiiiiss", $name, $usn, $email, $phone, $department, $semester, $tenth_aggr, $twelveth_aggr, $engg_aggr, $section, $branch);
+        $stmt = $conn->prepare("INSERT INTO student_details (name, usn, email, phone, department, semester, tenth_aggr, twelveth_aggr, engg_aggr, section, branch, faculty) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssiiiisss", $name, $usn, $email, $phone, $department, $semester, $tenth_aggr, $twelveth_aggr, $engg_aggr, $section, $branch, $faculty);
 
         if ($stmt->execute()) {
             echo "New student added successfully";
@@ -60,29 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $check_usn_stmt->close();
 }
-
-// Fetch all unique departments for the dropdown
-$department_query = "SELECT department_name FROM departments ORDER BY department_name";
-$department_result = $conn->query($department_query);
-$conn->close();
-?>
-
-
-
-
-<?php
-include("./config.php");
-
-
-// Fetch all unique branches
-$branch_query = "SELECT DISTINCT branch FROM student_details ORDER BY branch";
-$branch_result = $conn->query($branch_query);
-$branches = [];
-while ($row = $branch_result->fetch_assoc()) {
-    $branches[] = $row['branch'];
-}
-
-$conn->close();
 ?>
 
 <!doctype html>
@@ -94,7 +80,6 @@ $conn->close();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./files/css/index.css">
     <link rel="stylesheet" href="./files/css/style.css">
-
 </head>
 <body>
 <nav class="navbar navBar navbar-expand-lg navbar-dark" style="background-color: #00496e !important;">
@@ -116,7 +101,6 @@ $conn->close();
             <div class="dropdown-menu">
               <ul>
                 <li><a class="dropdown-item" href="./add_student.php">Add Student Details</a></li>
-
               </ul>
             </div>
           </li>
@@ -124,118 +108,118 @@ $conn->close();
             <a class="nav-link" href="./Add-Departments.php">Add Departments</a>
           </li>
           <li>
-            &nbsp;
-
-            &nbsp;
-            &nbsp;
+            &nbsp;&nbsp;&nbsp;
           </li>
-          
-
         </ul>
-            <a class="btn btn-danger" href="./logout.php">Logout</a>
-          
-
+        <a class="btn btn-danger" href="./logout.php">Logout</a>
       </div>
     </div>
   </nav>
 
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar for branches -->
-            <nav class="my-5 col-md-3 col-lg-2 d-md-block sidebar">
-                <div class="position-sticky">
-                    <ul class="nav flex-column">
-                    <hr style="margin-top: -5px; margin-left:-12px; color: white; width:250px;">
-                        <?php foreach ($branches as $branch): ?>
-                            <li class="nav-item">
-                                <a class="nav-link side-link" href="batch_departments.php?branch=<?= urlencode($branch) ?>">
-                                    branch: <?= htmlspecialchars($branch) ?>
-                                </a>
-                            </li>
-                            
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            </nav>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar for branches -->
+      <nav class="my-5 col-md-3 col-lg-2 d-md-block sidebar">
+        <div class="position-sticky">
+          <ul class="nav flex-column">
+            <hr style="margin-top: -5px; margin-left:-12px; color: white; width:250px;">
+            <?php foreach ($branches as $branch): ?>
+              <li class="nav-item">
+                <a class="nav-link side-link" href="batch_departments.php?branch=<?= urlencode($branch) ?>">
+                  branch: <?= htmlspecialchars($branch) ?>
+                </a>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
+      </nav>
 
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-            <div class="container mt-5">
-    <h2>Add Student</h2>
-    <form action="" method="post">
-      <div class="row">
-        <div class="mb-3 col-md-6">
-          <label for="name" class="form-label">Name</label>
-          <input type="text" class="form-control" id="name" name="name" required>
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+        <div class="container mt-5">
+          <h2>Add Student</h2>
+          <form action="" method="post">
+            <div class="row">
+              <div class="mb-3 col-md-6">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="usn" class="form-label">USN</label>
+                <input type="text" class="form-control" id="usn" name="usn" required 
+                       pattern="^[1-9][A-Z]{2}\d{2}[A-Z]{2}\d{1,3}$" 
+                       title="Enter a valid USN in the format like 4PA20CS100 or 4PA20CS01">
+              </div>
+            </div>
+            <div class="row">
+              <div class="mb-3 col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="phone" class="form-label">Phone</label>
+                <input type="text" class="form-control" id="phone" name="phone" required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="mb-3 col-md-6">
+                <label for="department" class="form-label">Department</label>
+                <select class="form-control" id="department" name="department" required>
+                  <option value="">Select Department</option>
+                  <?php while ($row = $department_result->fetch_assoc()): ?>
+                    <option value="<?= htmlspecialchars($row['department_name']) ?>"><?= htmlspecialchars($row['department_name']) ?></option>
+                  <?php endwhile; ?>
+                </select>
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="semester" class="form-label">Semester</label>
+                <input type="number" class="form-control" id="semester" name="semester" required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="mb-3 col-md-6">
+                <label for="section" class="form-label">Section</label>
+                <input type="text" class="form-control" id="section" name="section" required 
+                       pattern="^[A-Z]$" 
+                       title="Enter a valid section (A, B, C, D, etc.)">
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="branch" class="form-label">Batch</label>
+                <input type="text" class="form-control" id="branch" name="branch" required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="mb-3 col-md-6">
+                <label for="tenth_aggr" class="form-label">10th Aggregate (%)</label>
+                <input type="number" class="form-control" id="tenth_aggr" name="tenth_aggr" required>
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="twelveth_aggr" class="form-label">12th Aggregate (%)</label>
+                <input type="number" class="form-control" id="twelveth_aggr" name="twelveth_aggr" required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="mb-3 col-md-6">
+                <label for="engg_aggr" class="form-label">Engg Aggregate (%)</label>
+                <input type="text" class="form-control" id="engg_aggr" name="engg_aggr" required>
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="faculty" class="form-label">Faculty In Charge</label>
+                <select class="form-control" id="faculty" name="faculty" required>
+                  <option value="">Select Faculty</option>
+                  <?php while ($row = $faculty_result->fetch_assoc()): ?>
+                    <option value="<?= htmlspecialchars($row['Full_Name']) ?>"><?= htmlspecialchars($row['Full_Name']) ?></option>
+                  <?php endwhile; ?>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
         </div>
-        <div class="mb-3 col-md-6">
-  <label for="usn" class="form-label">USN</label>
-  <input type="text" class="form-control" id="usn" name="usn" required 
-         pattern="^[1-9][A-Z]{2}\d{2}[A-Z]{2}\d{1,3}$" 
-         title="Enter a valid USN in the format like 4PA20CS100 or 4PA20CS01">
-</div>
-
-      </div>
-      <div class="row">
-        <div class="mb-3 col-md-6">
-          <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-        <div class="mb-3 col-md-6">
-          <label for="phone" class="form-label">Phone</label>
-          <input type="text" class="form-control" id="phone" name="phone" required>
-        </div>
-      </div>
-      <div class="row">
-        <div class="mb-3 col-md-6">
-          <label for="department" class="form-label">Department</label>
-          <select class="form-control" id="department" name="department" required>
-            <option value="">Select Department</option>
-            <?php while ($row = $department_result->fetch_assoc()): ?>
-              <option value="<?= htmlspecialchars($row['department_name']) ?>"><?= htmlspecialchars($row['department_name']) ?></option>
-            <?php endwhile; ?>
-          </select>
-        </div>
-        <div class="mb-3 col-md-6">
-          <label for="semester" class="form-label">Semester</label>
-          <input type="number" class="form-control" id="semester" name="semester" required>
-        </div>
-      </div>
-      <div class="row">
-      <div class="mb-3 col-md-6">
-  <label for="section" class="form-label">Section</label>
-  <input type="text" class="form-control" id="section" name="section" required 
-         pattern="^[A-Z]$" 
-         title="Enter a valid section (A, B, C, D, etc.)">
-</div>
-
-        <div class="mb-3 col-md-6">
-          <label for="branch" class="form-label">Batch</label>
-          <input type="text" class="form-control" id="branch" name="branch" required>
-        </div>
-      </div>
-      <div class="row">
-        <div class="mb-3 col-md-6">
-          <label for="tenth_aggr" class="form-label">10th Aggregate</label>
-          <input type="number" step="0.01" class="form-control" id="tenth_aggr" name="tenth_aggr" required>
-        </div>
-        <div class="mb-3 col-md-6">
-          <label for="twelveth_aggr" class="form-label">12th Aggregate</label>
-          <input type="number" step="0.01" class="form-control" id="twelveth_aggr" name="twelveth_aggr" required>
-        </div>
-      </div>
-      <div class="mb-3">
-        <label for="engg_aggr" class="form-label">Engineering Aggregate</label>
-        <input type="number" step="0.01" class="form-control" id="engg_aggr" name="engg_aggr" required>
-      </div>
-
-      <button type="submit" class="btn btn-primary">Add Student</button>
-    </form>
-  </div>
-            </main>
-        </div>
+      </main>
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./files/js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
