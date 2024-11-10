@@ -1,7 +1,7 @@
 <?php
 include("./config.php");
 session_start();
-if( $_SESSION['user_type'] ="faculty"){
+if( $_SESSION['user_type'] !="admin"){
     header("Location:./accessDenied.html");
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
